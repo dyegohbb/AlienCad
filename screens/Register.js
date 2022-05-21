@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { initializeApp } from "firebase/app";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { Header, Button, Image, Input } from "react-native-elements";
@@ -6,6 +8,19 @@ import styles from "../styles/styles.js";
 import axios from "axios";
 
 export default function Register({ route, navigation }) {
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBUxusNJ-pW9YDsmcP80k-SDBaYIn4K114",
+    authDomain: "aliencad-login.firebaseapp.com",
+    projectId: "aliencad-login",
+    storageBucket: "aliencad-login.appspot.com",
+    messagingSenderId: "205351769296",
+    appId: "1:205351769296:web:ad817fb5c2ec168808fad5",
+    measurementId: "G-419T6FM8LK"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
   const [getType, setType] = useState();
   const [getNome, setNome] = useState("");
   const [getEmail, setEmail] = useState("");
@@ -33,15 +48,26 @@ export default function Register({ route, navigation }) {
   }, []);
 
   function saveUser() {
-    console.log(getNome);
-    console.log(getEmail);
-    console.log(getPwd);
+    createUserWithEmailAndPassword(auth, getEmail, getPwd).then((userCredential) => {
+      navigation.navigate("Home")
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
-  function saveContact() {
-    console.log(getNome);
-    console.log(getCpf);
-    console.log(getTel);
+  async function saveContact() {
+    await axios.post('http://professornilson.com/testeservico/clientes', {
+      nome: getNome,
+      telefone: getTel,
+      cpf: getEmail
+    })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
 
@@ -84,13 +110,6 @@ export default function Register({ route, navigation }) {
           </View>
           <Text style={styles.titleRegister}>Cadastro de usuário</Text>
           <View style={styles.box4}>
-            <TextInput
-              style={styles.textInputUserRegister}
-              maxLength={20}
-              placeholderTextColor="green"
-              placeholder="Nome"
-              onChangeText={(nome) => setNome(nome)}
-            />
             <TextInput
               style={styles.textInputUserRegister}
               maxLength={20}

@@ -18,7 +18,6 @@ export default function UserList({ navigation }) {
             'http://professornilson.com/testeservico/clientes',
           );
           setContatos(result.data);
-          console.log(result.data)
     }
     listAll();
   },[])

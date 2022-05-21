@@ -1,9 +1,11 @@
+import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
 import { Button, Image } from "react-native-elements";
 import styles from "../styles/styles.js";
 
 export default function Home({ navigation }) {
+
   return (
     <View style={styles.box1}>
       <StatusBar style="auto" />
